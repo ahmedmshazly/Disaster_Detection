@@ -1,23 +1,25 @@
-from flask import Flask, render_template
-from flask import request, redirect, url_for
-import pickle
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
-from flask import Flask, render_template, request
-from flask import Flask, request, jsonify
-import pickle
-import numpy as np
 import pandas as pd
 import re
-import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
+import requests
+import dill
+
 
 app = Flask(__name__)
 
-with open('model.pkl', 'rb') as file:
-    vectorizer, model = pickle.load(file)
+# Define global variables
+vectorizer = None
+model = "aa"
 
+model_url = 'https://drive.google.com/uc?id=1r46OXcPY-YV1AM8GVmj8KMGs6t_NdLxG'
+model_path = 'model.pkl'  # Choose a local path to save the model file
+response = requests.get(model_url)
+with open('model.pkl', 'rb') as file:
+    vectorizer, model = dill.load(file)
 
 @app.route('/upload')
 def upload():
@@ -25,6 +27,7 @@ def upload():
 
 @app.route('/process_uploaded_file', methods=['POST'])
 def process_uploaded_file():
+    global vectorizer, model 
     try:
         uploaded_file = request.files['file']
 
@@ -66,6 +69,7 @@ def process_uploaded_file():
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    global vectorizer, model
     try:
         # Reading the number of tweets to process from the request
 # Reading the number of tweets to process from the request
@@ -114,6 +118,7 @@ def predict_single_tweet():
 
 @app.route('/predict_single', methods=['POST'])
 def predict_single():
+    global vectorizer, model
     try:
         data = request.json
         tweet_text = data['tweet_text']
@@ -237,7 +242,7 @@ def predict_from_saved_model_single(text, model_filename):
 
 @app.route('/')
 def home():
-    return app.send_static_file('index.html')
+    return render_template('index.html')
 
 
 
