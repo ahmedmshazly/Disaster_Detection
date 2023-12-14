@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Data CSV - Disaster Prediction App</title>
+    <link rel="stylesheet" href="/static/css/style4.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Data CSV</h1>
+        
+        <p>Upload a <strong>data.csv</strong> file to analyze:</p>
+
+        <form action="/upload_data" method="POST" enctype="multipart/form-data" class="upload-form">
+            <input type="file" name="csvFile" accept=".csv" class="file-input">
+            <button type="submit">Upload</button>
+        </form>
+
+        <a href="/" class="back-link">Back to Home</a>
+    </div>
+</body>
+</html>
